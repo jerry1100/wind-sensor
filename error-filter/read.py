@@ -53,15 +53,15 @@ while (i1 < len(data1) and i2 < len(data2)):
     diff = data2[i2] - data1[i1]
     if (filt and diff < t_lower):
         if (debug):
-            print("UNDR: %d %d %d KEEP t1" % (t1, t2, diff/96))
+            print("UNDR  %8d (+%3d)  %8d (+%3d)  %6d  KEEP t1" % (t1, (data1[i1] - data1[i1-1])/96 if (i1 > 0) else 0, t2, (data2[i1] - data2[i1-1])/96 if (i2 > 0) else 0, diff/96))
         i2 += 1
     elif (filt and diff > t_upper):
         if (debug):
-            print("OVER: %d %d %d KEEP t2" % (t1, t2, diff/96))
+            print("UNDR  %8d (+%3d)  %8d (+%3d)  %6d  KEEP t1" % (t1, (data1[i1] - data1[i1-1])/96 if (i1 > 0) else 0, t2, (data2[i1] - data2[i1-1])/96 if (i2 > 0) else 0, diff/96))
         i1 += 1
     else:
         if (debug):
-            print("GOOD: %d %d %d STORE" % (t1, t2, diff/96))
+            print("UNDR  %8d (+%3d)  %8d (+%3d)  %6d  KEEP t1" % (t1, (data1[i1] - data1[i1-1])/96 if (i1 > 0) else 0, t2, (data2[i1] - data2[i1-1])/96 if (i2 > 0) else 0, diff/96))
         times.append(diff)
         i2 += 1
         i1 += 1
