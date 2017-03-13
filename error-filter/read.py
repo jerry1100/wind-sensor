@@ -21,7 +21,7 @@ if (len(sys.argv) > 2):
 dist = 9.4/100 # in meters
 temp = 25 # degrees C
 wind = 0 # m/s
-prop = dist/(331.4 + 0.6*temp + wind)*96*10**6 # clock cycles
+prop = dist/(331.4 + 0.6*temp + wind)*96*10**6 # prop measured in cc
 
 # Thresholds based on theoretical prop
 t_lower = prop*0.5 # play around with these
@@ -47,21 +47,21 @@ if (debug):
 times = []
 i1 = i2 = 0
 while (i1 < len(data1) and i2 < len(data2)):
-    t1 = data1[i1]/96
-    t2 = data2[i2]/96
-
+    t1 = data1[i1]/100
+    t2 = data2[i2]/100
     diff = data2[i2] - data1[i1]
+
     if (filt and diff < t_lower):
         if (debug):
-            print("UNDR  %8d (+%3d)  %8d (+%3d)  %6d  KEEP t1" % (t1, (data1[i1] - data1[i1-1])/96 if (i1 > 0) else 0, t2, (data2[i1] - data2[i1-1])/96 if (i2 > 0) else 0, diff/96))
+            print("%8d (+%4d)  %8d (+%4d)  %6d  UNDR  INCR t2" % (t1, (data1[i1] - data1[i1-1])/100 if (i1 > 0) else 0, t2, (data2[i2] - data2[i2-1])/100 if (i2 > 0) else 0, diff/100))
         i2 += 1
     elif (filt and diff > t_upper):
         if (debug):
-            print("UNDR  %8d (+%3d)  %8d (+%3d)  %6d  KEEP t1" % (t1, (data1[i1] - data1[i1-1])/96 if (i1 > 0) else 0, t2, (data2[i1] - data2[i1-1])/96 if (i2 > 0) else 0, diff/96))
+            print("%8d (+%4d)  %8d (+%4d)  %6d  OVER  INCR t1" % (t1, (data1[i1] - data1[i1-1])/100 if (i1 > 0) else 0, t2, (data2[i2] - data2[i2-1])/100 if (i2 > 0) else 0, diff/100))
         i1 += 1
     else:
         if (debug):
-            print("UNDR  %8d (+%3d)  %8d (+%3d)  %6d  KEEP t1" % (t1, (data1[i1] - data1[i1-1])/96 if (i1 > 0) else 0, t2, (data2[i1] - data2[i1-1])/96 if (i2 > 0) else 0, diff/96))
+            print("%8d (+%4d)  %8d (+%4d)  %6d  KEEP  INCR both" % (t1, (data1[i1] - data1[i1-1])/100 if (i1 > 0) else 0, t2, (data2[i2] - data2[i2-1])/100 if (i2 > 0) else 0, diff/100))
         times.append(diff)
         i2 += 1
         i1 += 1
