@@ -24,8 +24,8 @@ wind = 0 # m/s
 prop = dist/(331.4 + 0.6*temp + wind)*96*10**6 # prop measured in cc
 
 # Thresholds based on theoretical prop
-t_lower = prop*0.5 # play around with these
-t_upper = prop*1.5
+t_lower = prop*0.75 # play around with these
+t_upper = prop*1.25
 print("Theoretical prop: %d %d" % (prop, prop/96))
 print("Lower threshold: %d %d" % (t_lower, t_lower/96))
 print("Upper threshold: %d %d" % (t_upper, t_upper/96))
