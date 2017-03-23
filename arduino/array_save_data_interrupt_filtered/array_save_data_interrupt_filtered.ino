@@ -11,7 +11,7 @@ const int mic2 = 15;
 const int resetPin = 12;
 
 // Number of cycles to count up to (1 cycle = 2 triggers)
-const int cycles = 500;
+const int cycles = 1000;
 const int triggers = 2*cycles;
 
 // Variables used in interrupts
@@ -25,6 +25,7 @@ volatile int arr2[triggers];
 //#define DEBUG
 
 void setup() {
+    delay(10000);
     // Set up counting clock cycles
     ARM_DEMCR |= ARM_DEMCR_TRCENA;
     ARM_DWT_CTRL |= ARM_DWT_CTRL_CYCCNTENA;
@@ -118,7 +119,7 @@ void waitForReset() {
 
     // Print results
     int average = sum_diff / num_samples;
-    Serial.printf("%d sample results (out of %d) | Theoretical: %d %dus | Experimental: %d %dus\n",
+    Serial.printf("%4d sample results (out of %d) | Theoretical: %d %dus | Experimental: %d %dus\n",
         num_samples, triggers, prop, prop/96, average, average/96); 
    
     // Clear and reset
