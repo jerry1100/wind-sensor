@@ -1,19 +1,23 @@
-#include <TimerOne.h>
-
 int pin = 14; // emitter pin
-int state = HIGH; // 0 if low, 1 if high
 
-void setup() {
-  pinMode(pin, OUTPUT);
-  Timer1.initialize(12);
-  Timer1.attachInterrupt(toggle); // toggle pin every 25us
+void setup()
+{
+    pinMode(pin, OUTPUT);
 }
 
-void loop() {
-
+void loop()
+{
+    pulse();
+    delayMicroseconds(1600);
 }
 
-void pulse() {
-  state = (state == HIGH) ? LOW : HIGH;
-  digitalWrite(pin, state);
+void pulse()
+{
+    for (int i = 0; i < 100; i++)
+    {
+        digitalWrite(pin, HIGH);
+        delayMicroseconds(12);
+        digitalWrite(pin, LOW);
+        delayMicroseconds(12);
+    }
 }
