@@ -30,8 +30,8 @@ void pulse() {
     count = 0;
     state = 0;
 
-    Timer1.restart(); // start the timer
-    while (count < NUM_PULSES*2); // wait for timer to finish
+    Timer1.restart(); // start the timer, should take 240us
+    delayMicroseconds(240);
 }
 
 void pulse_isr() {
@@ -39,7 +39,7 @@ void pulse_isr() {
     digitalWriteFast(EMIT_PIN, state);
     count++;
 
-    if (count >= NUM_PULSES*2) {
+    if (count == NUM_PULSES*2) {
         Timer1.stop();
     }
 }
