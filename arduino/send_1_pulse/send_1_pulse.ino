@@ -1,19 +1,16 @@
 const int pin = 14; // emitter pin
 
 void setup() {
-  pinMode(pin, OUTPUT);
+    pinMode(pin, OUTPUT);
 }
 
 void loop() {
-  send_pulses();
-  delayMicroseconds(250);
+    send_1_pulse();
+    delay(2);
 }
 
-void send_pulses() {
-  for (int i = 0; i < 10; i++) {
+void send_1_pulse() {
     digitalWrite(pin, HIGH);
     delayMicroseconds(12);
     digitalWrite(pin, LOW);
-    delayMicroseconds(12);
-  }
 }

@@ -1,10 +1,9 @@
 /*
-    Main development program for the Ultrasonic Wind Sensor project.
- */
+  Program to send 10 40kHz pulses using a timer interrupt
+*/
 
 #include <TimerOne.h>
 
-#define CYCLE ARM_DWT_CYCCNT
 #define EMIT_PIN 5
 #define NUM_PULSES 10
 
@@ -12,8 +11,6 @@ volatile byte count;
 volatile byte state;
 
 void setup() {
-    ARM_DEMCR |= ARM_DEMCR_TRCENA;
-    ARM_DWT_CTRL |= ARM_DWT_CTRL_CYCCNTENA;
     pinMode(EMIT_PIN, OUTPUT);
 
     Timer1.initialize(12);
