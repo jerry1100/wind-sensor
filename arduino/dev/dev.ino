@@ -39,9 +39,10 @@ void loop() {
     // Display results
     for (int i = 0; i < 2*NUM_PULSES; i++) {
         unsigned long diff = recv_times[i] - emit_times[i];
-        Serial.printf("[%d] Send: %lf, Recv: %lf, Diff: %lf (%.3f us)\n",
+        Serial.printf("[%d] Send: %lu, Recv: %lu, Diff: %lu (%.3f us)\n",
                       i, emit_times[i], recv_times[i], diff, diff / 96.0);
     }
+    delayMicroseconds(500);
 }
 
 void pulse() {
@@ -70,6 +71,7 @@ void pulse_isr() {
 void receive_isr() {
     // TODO add time checking code
     recv_times[recv_count] = CYCLE;
+    recv_count++;
 
     if (recv_count == 2*NUM_PULSES) {
         detachInterrupt(RECV_PIN);
