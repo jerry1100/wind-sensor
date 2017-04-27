@@ -6,7 +6,7 @@
 
 #define EMIT_PIN 5
 #define RECV_PIN 20
-#define NUM_PULSES 10
+#define NUM_PULSES 5
 
 volatile byte emit_state;
 volatile byte emit_count;
@@ -38,7 +38,7 @@ void pulse() {
 
 void pulse_isr() {
     emit_state = !emit_state;
-    emit_times[emit_count] = CYCLE;
+    digitalWrite(EMIT_PIN, emit_state);
     emit_count++;
 
     if (emit_count == 2*NUM_PULSES) {
