@@ -1,5 +1,5 @@
 /*
-    Main development program for the Ultrasonic Wind Sensor project.
+    Send ten pulses and see their propagation times.
  */
 
 #include <TimerOne.h>
@@ -15,13 +15,6 @@ volatile byte emit_count;
 volatile byte recv_count;
 unsigned long emit_times[NUM_PULSES];
 unsigned long recv_times[NUM_PULSES];
-
-unsigned long total_diff = 0;
-unsigned long filter_diff = 0;
-int total_samples = 0;
-int filter_samples = 0;
-
-float prev_result;
 
 void setup() {
     // Set up clock cycle access
@@ -45,34 +38,20 @@ void loop() {
     // Send pulse
     pulse();
 
-    unsigned long diff = recv_times[0] - emit_times[0];
-    
-    // Cumulate total difference
-    total_samples++;
-    total_diff += diff;
-
-    // Cumulate good (filtered) difference
-    if (abs(diff - prev_result) < 2000) {
-        filter_diff += diff;
-        filter_samples++;
+    // Display results
+    for (int i = 0; i < NUM_PULSES; i++) {
+        unsigned long diff = recv_times[i] - emit_times[i];
+        unsigned long diff_emit = (i == 0) ? 0 : emit_times[i] - emit_times[i-1];
+        unsigned long diff_recv = (i == 0) ? 0 : recv_times[i] - recv_times[i-1];
+        Serial.printf("[%d] Send: %lu (+%.3f us), Recv: %lu (+%.3fus), Diff: %lu (%.3f us)\n",
+                      i, emit_times[i], diff_emit/96.0, recv_times[i], diff_recv/96.0, diff, 
+                      diff/96.0);
     }
 
-    // Wait for next run
-    if (total_samples == 400) {
-        prev_result = total_diff/total_samples;
-        Serial.printf("(Total) %d samples: %.3f us\n", total_samples, total_diff/96.0/total_samples);
-        Serial.printf("(Filtr) %d samples: %.3f us\n", filter_samples, filter_diff/96.0/filter_samples);
-        Serial.printf("\n");
-        while (digitalRead(RESET_PIN) == HIGH);
-
-        // Reset
-        total_diff = 0;
-        filter_diff = 0;
-        filter_samples = 0;
-        total_samples = 0;
-    }
-
-    delay(1); // delay 1ms
+    // Wait for reset
+    while (digitalRead(RESET_PIN) == HIGH);
+    Serial.printf("\n");
+    delay(500);
 }
 
 void pulse() {
