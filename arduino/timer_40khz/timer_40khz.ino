@@ -1,7 +1,7 @@
 #include <TimerOne.h>
 
-#define EMIT_PIN 5
-#define RECV_PIN 20
+#define EMIT_PIN 20
+#define RECV_PIN 5
 
 byte emit_state = 0; // 0 if low, 1 if high
 
