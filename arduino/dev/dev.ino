@@ -46,43 +46,52 @@ void loop() {
     // Send pulse
     pulse();
 
-    unsigned long diff = recv_times[NUM_PULSES-1] - emit_times[NUM_PULSES-1];
+    unsigned long pdiff = recv_times[NUM_PULSES-1] - emit_times[NUM_PULSES-1];
+    for (int a = 1; a < 10; a++) {
+        if (count == 0) {
+            diff[a] = prev_diff[a] = pdiff;
+        }
+        float alpha = a/100.0;
+        diff[a] = alpha*pdiff + (1-alpha)*prev_diff[a];
+        prev_diff[a] = diff[a];
+        Serial.printf("%.3f,", diff[a]/120.0);
+    }
+    Serial.printf("\n");
     // unsigned long diff = recv_times[0] - emit_times[0];
     
-    // Cumulate total difference
-    total_samples++;
-    total_diff += diff;
+    // // Cumulate total difference
+    // total_samples++;
+    // total_diff += diff;
 
-    // Cumulate filtered difference
-    if (abs(diff - prev_result) < 60) {
-        filter_diff += diff;
-        filter_samples++;
-    }
+    // // Cumulate filtered difference
+    // if (abs(diff - prev_result) < 60) {
+    //     filter_diff += diff;
+    //     filter_samples++;
+    // }
 
-    // Wait for next run
-    if (total_samples == 500) {
-        prev_result = total_diff/total_samples;
-        Serial.printf("(Total) %d samples: %.3f us\n", total_samples, total_diff/120.0/total_samples);
-        Serial.printf("(Filtr) %d samples: %.3f us\n", filter_samples, filter_diff/120.0/filter_samples);
-        Serial.printf("\n");
-        // Serial.printf("%.4f\n", filter_diff/120.0/filter_samples);
-        // Serial.printf("%.4f\n", total_diff/120.0/total_samples);
-        // while (digitalRead(RESET_PIN) == HIGH);
+    // // Wait for next run
+    // if (total_samples == 500) {
+    //     prev_result = total_diff/total_samples;
+    //     Serial.printf("(Total) %d samples: %.3f us\n", total_samples, total_diff/120.0/total_samples);
+    //     Serial.printf("(Filtr) %d samples: %.3f us\n", filter_samples, filter_diff/120.0/filter_samples);
+    //     Serial.printf("\n");
+    //     // Serial.printf("%.4f\n", filter_diff/120.0/filter_samples);
+    //     // Serial.printf("%.4f\n", total_diff/120.0/total_samples);
+    //     // while (digitalRead(RESET_PIN) == HIGH);
 
-        // Reset
-        total_diff = 0;
-        filter_diff = 0;
-        filter_samples = 0;
-        total_samples = 0;
+    //     // Reset
+    //     total_diff = 0;
+    //     filter_diff = 0;
+    //     filter_samples = 0;
+    //     total_samples = 0;
 
-        // if (count++ == 100) {
-        //     Serial.printf("Done");
-        //     delay(100000);
-        //     exit(0);
-        // }
-    }
+        if (count++ == 10000) {
+            Serial.printf("Done");
+            exit(0);
+        }
+    // }
 
-    delayMicroseconds(1500); // wait for receiver to die down
+    delayMicroseconds(2000); // wait for receiver to die down
 }
 
 void pulse() {
