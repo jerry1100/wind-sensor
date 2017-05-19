@@ -6,7 +6,7 @@
 
 #define EMIT_PIN 20
 #define RECV_PIN 5
-#define NUM_PULSES 10
+#define NUM_PULSES 4
 
 volatile byte emit_state;
 volatile byte emit_count;
